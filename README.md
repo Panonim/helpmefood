@@ -5,7 +5,7 @@ Gra zrobiona z powodu konursu na kanale "[koza koduje](https://www.youtube.com/@
 
 Gra ma wiele błędów, ale jest zrobiona w jednej linjce, bardzo mi się nie chciało poprawiaćtego przystkiego, dlatego jedzenie ma złe hitboxy i czasem węże na siebie nachodzą. 
 
-Gra jest zrobiona w języku javascript, a całość ma około 3 tysiące znaków.
+Gra jest zrobiona w języku javascript, a całość ma około 3 tysiące znaków oraz była pisana w jednej lini.
 
 
 ## Instalacja
