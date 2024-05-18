@@ -17,14 +17,22 @@ let player = { x: Math.floor(width / 2), y: Math.floor(height / 2) }
 // Inicjalizacja głównej węża
 let mainSnake = [{ x: 0, y: 0 }]
 
+// Ustalanie długości zielonych węży
+const greenSnakeLength = 3
+
 // Inicjalizacja zielonych węży
 let greenSnakes = []
+const spawnGreenSnake = () => {
+    return {
+        body: Array.from({ length: greenSnakeLength }, () => ({
+            x: Math.floor(Math.random() * width),
+            y: Math.floor(Math.random() * height),
+        }))
+    }
+}
+
 for (let i = 0; i < 3; i++) {
-   greenSnakes.push({
-       x: Math.floor(Math.random() * width),
-       y: Math.floor(Math.random() * height),
-       length: 3,
-   })
+   greenSnakes.push(spawnGreenSnake())
 }
 
 // Inicjalizacja kierunku ruchu
@@ -48,15 +56,18 @@ const draw = () => {
                mainSnake.some((segment) => segment.x === x && segment.y === y)
            ) {
                line += '\x1b[91mS\x1b[0m'
-           } else if (
-               greenSnakes.some(
-                   (snake) => x >= snake.x && x < snake.x + 3 && y === snake.y
-               )
-           ) {
-               line += '\x1b[32mSSS\x1b[0m'
-               x += 2
            } else {
-               line += ' '
+               let snakeSegmentFound = false
+               for (let snake of greenSnakes) {
+                   if (snake.body.some(segment => segment.x === x && segment.y === y)) {
+                       line += '\x1b[32mS\x1b[0m'
+                       snakeSegmentFound = true
+                       break
+                   }
+               }
+               if (!snakeSegmentFound) {
+                   line += ' '
+               }
            }
        }
        console.log(line)
@@ -65,46 +76,30 @@ const draw = () => {
 }
 
 // Funkcja przesuwająca węża
-const moveSnake = (snake, targetX, targetY) => {
+const moveSnake = (snake, targetX, targetY, length = 8) => {
    const head = { ...snake[0] }
    const dx = targetX - head.x
    const dy = targetY - head.y
    head.x += dx !== 0 ? Math.sign(dx) : 0
    head.y += dy !== 0 ? Math.sign(dy) : 0
    snake.unshift(head)
-   while (snake.length > 8) snake.pop()
+   while (snake.length > length) snake.pop()
    return head
 }
 
-// Funkcja przesuwająca zielone węże
+// Funkcja przesuwająca zielone węże w losowych kierunkach
 const moveGreenSnakes = () => {
    greenSnakes.forEach((snake) => {
-       const dx =
-           Math.random() > 0.5
-               ? Math.random() > 0.5
-                   ? Math.sign(Math.random() * 3 - 1)
-                   : 0
-               : Math.sign(mainSnake[0].x - snake.x)
-       const dy =
-           Math.random() > 0.5
-               ? Math.random() > 0.5
-                   ? Math.sign(Math.random() * 3 - 1)
-                   : 0
-               : Math.sign(mainSnake[0].y - snake.y)
-       const newX = snake.x + dx
-       const newY = snake.y + dy
-       if (
-           newX >= 0 &&
-           newX < width &&
-           newY >= 0 &&
-           newY < height &&
-           !mainSnake.some(
-               (segment) => segment.x === newX && segment.y === newY
-           ) &&
-           !greenSnakes.some((green) => green.x === newX && green.y === newY)
-       ) {
-           snake.x = newX
-           snake.y = newY
+       const head = snake.body[0]
+       const dx = Math.floor(Math.random() * 3) - 1 // -1, 0, or 1
+       const dy = Math.floor(Math.random() * 3) - 1 // -1, 0, or 1
+       const newHead = {
+           x: Math.min(Math.max(head.x + dx, 0), width - 1), // Ensure the position stays within the width
+           y: Math.min(Math.max(head.y + dy, 0), height - 1) // Ensure the position stays within the height
+       }
+       snake.body.unshift(newHead)
+       while (snake.body.length > greenSnakeLength) {
+           snake.body.pop()
        }
    })
 }
@@ -143,13 +138,11 @@ const gameLoop = () => {
        gameOver = true
    }
    greenSnakes.forEach((snake, index) => {
-       if (snake.x === player.x && snake.y === player.y) {
-           points++
-           snake.length += 2
-           const newX = Math.floor(Math.random() * width)
-           const newY = Math.floor(Math.random() * height)
-           snake.x = newX
-           snake.y = newY
+       const hitSegment = snake.body.find(segment => segment.x === player.x && segment.y === player.y)
+       if (hitSegment) {
+           points += 1 // Award only one point
+           greenSnakes.splice(index, 1)
+           greenSnakes.push(spawnGreenSnake()) // Spawn a new green snake
        }
    })
    if (points >= 20) {
