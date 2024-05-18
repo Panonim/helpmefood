@@ -4,8 +4,6 @@ Nietuzinkowa gra w której wcielasz się w jedzenie i uciekasz od węża który 
 
 Gra zrobiona z powodu konursu na kanale "[koza koduje](https://www.youtube.com/@goatcode)".
 
-Gra ma wiele błędów, ale jest zrobiona w jednej linjce, bardzo mi się nie chciało poprawiaćtego przystkiego, dlatego jedzenie ma złe hitboxy i czasem węże na siebie nachodzą. 
-
 Gra jest zrobiona w języku javascript, a całość ma około 3 tysiące znaków oraz była pisana w jednej lini.
 
 
