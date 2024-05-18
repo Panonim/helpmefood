@@ -1,5 +1,6 @@
 
 # Help me food!
+Nietuzinkowa gra w której wcielasz się w jedzenie i uciekasz od węża który chce ciebie zjeść. Zjadaj zielone węże i zdobądź 20 punktów aby wygrać zanim czerwony ciebie zje! 
 
 Gra zrobiona z powodu konursu na kanale "[koza koduje](https://www.youtube.com/@goatcode)".
 
