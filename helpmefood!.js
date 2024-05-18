@@ -94,8 +94,8 @@ const moveGreenSnakes = () => {
        const dx = Math.floor(Math.random() * 3) - 1 // -1, 0, or 1
        const dy = Math.floor(Math.random() * 3) - 1 // -1, 0, or 1
        const newHead = {
-           x: Math.min(Math.max(head.x + dx, 0), width - 1), // Ensure the position stays within the width
-           y: Math.min(Math.max(head.y + dy, 0), height - 1) // Ensure the position stays within the height
+           x: Math.min(Math.max(head.x + dx, 0), width - 1), // Upewnienie się, że pozycja pozostaje w szerokości
+           y: Math.min(Math.max(head.y + dy, 0), height - 1) // Upewnienie się, że pozycja pozostaje w wysokości
        }
        snake.body.unshift(newHead)
        while (snake.body.length > greenSnakeLength) {
@@ -140,9 +140,9 @@ const gameLoop = () => {
    greenSnakes.forEach((snake, index) => {
        const hitSegment = snake.body.find(segment => segment.x === player.x && segment.y === player.y)
        if (hitSegment) {
-           points += 1 // Award only one point
+           points += 1 // Przyznaj tylko jeden punkt
            greenSnakes.splice(index, 1)
-           greenSnakes.push(spawnGreenSnake()) // Spawn a new green snake
+           greenSnakes.push(spawnGreenSnake()) // Wygeneruj nowego zielonego węża
        }
    })
    if (points >= 20) {
