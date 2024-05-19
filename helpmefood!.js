@@ -60,7 +60,7 @@ const draw = () => {
                let snakeSegmentFound = false
                for (let snake of greenSnakes) {
                    if (snake.body.some(segment => segment.x === x && segment.y === y)) {
-                       line += '\x1b[32mS\x1b[0m'
+                       line += '\x1b[92mS\x1b[0m'
                        snakeSegmentFound = true
                        break
                    }
